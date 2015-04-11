@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `retry` fn in crate `retry`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, retry">
+
+    <title>retry::retry - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../main.css">
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <section class="sidebar">
+        
+        <p class='location'><a href='index.html'>retry</a></p><script>window.sidebarCurrent = {name: 'retry', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </section>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press 'S' to search, '?' for more options..."
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content fn">
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>retry</a>::<wbr><a class='fn' href=''>retry</a><wbr></span><span class='out-of-band'><span id='render-detail'>
+            <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
+        </span><a id='src-111' href='../src/retry/lib.rs.html#73-94'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn retry&lt;F, G, R&gt;(tries: <a href='http://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, wait: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, value_fn: F, condition_fn: G) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;R, <a class='struct' href='../retry/struct.RetryError.html' title='retry::RetryError'>RetryError</a>&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>() -&gt; R, G: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;R) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></span></pre><div class='docblock'><p>Invokes a function until a condition is satisfied.</p>
+
+<p><code>value_fn</code> is a closure that will be executed to produce a value. <code>condition_fn</code> is a closure
+that takes the value produced by <code>value_fn</code> and returns a boolean indicating whether or not
+some desired condition is true. <code>retry</code> will invoke <code>value_fn</code> up to <code>tries</code> times, returning
+the value as soon as <code>condition_fn</code> is satisfied, or returning an error when the last try was
+unsuccessful. It will wait <code>wait</code> milliseconds after each unsuccessful try.</p>
+
+<h1 id="failures" class='section-header'><a
+                           href="#failures">Failures</a></h1>
+<p>Will fail when:</p>
+
+<ol>
+<li><code>value_fn</code> has been been invoked <code>tries</code> times and has still not satisfied <code>condition_fn</code>.</li>
+<li><code>tries</code> is zero. It must be at least 1.</li>
+</ol>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1>
+<p>Imagine an HTTP API with an endpoint that returns 204 No Content while a job is processing, and
+eventually 200 OK when the job has completed. Retrying until the job is finished would be
+written:</p>
+<pre id='rust-example-rendered' class='rust '>
+<span class='kw'>match</span> <span class='ident'>retry</span>(<span class='number'>10</span>, <span class='number'>500</span>, <span class='op'>||</span> <span class='ident'>api_client</span>.<span class='ident'>query_job_status</span>(), <span class='op'>|</span><span class='ident'>response</span><span class='op'>|</span> <span class='ident'>response</span>.<span class='ident'>code</span> <span class='op'>==</span> <span class='number'>200</span>) {
+    <span class='prelude-val'>Ok</span>(<span class='ident'>response</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Job completed with result: {}&quot;</span>, <span class='ident'>response</span>.<span class='ident'>body</span>),
+    <span class='prelude-val'>Err</span>(<span class='ident'>error</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Job completion could not be verified: {}&quot;</span>, <span class='ident'>error</span>),
+}
+</pre>
+
+<p>This retries the API call up to 10 times, waiting 500 milliseconds after each unsuccesful
+attempt.</p>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <div id="help" class="hidden">
+        <div class="shortcuts">
+            <h1>Keyboard shortcuts</h1>
+            <dl>
+                <dt>?</dt>
+                <dd>Show this help dialog</dd>
+                <dt>S</dt>
+                <dd>Focus the search field</dd>
+                <dt>&larrb;</dt>
+                <dd>Move up in search results</dd>
+                <dt>&rarrb;</dt>
+                <dd>Move down in search results</dd>
+                <dt>&#9166;</dt>
+                <dd>Go to active search result</dd>
+            </dl>
+        </div>
+        <div class="infos">
+            <h1>Search tricks</h1>
+            <p>
+                Prefix searches with a type followed by a colon (e.g.
+                <code>fn:</code>) to restrict the search to a given type.
+            </p>
+            <p>
+                Accepted types are: <code>fn</code>, <code>mod</code>,
+                <code>struct</code>, <code>enum</code>,
+                <code>trait</code>, <code>typedef</code> (or
+                <code>tdef</code>).
+            </p>
+        </div>
+    </div>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "retry";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    
+    <script async src="../search-index.js"></script>
+</body>
+</html>
