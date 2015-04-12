@@ -245,7 +245,7 @@
 <span class='doccomment'>/// This retries the API call up to 10 times, waiting 500 milliseconds after each unsuccesful</span>
 <span class='doccomment'>/// attempt.</span>
 <span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>retry</span><span class='op'>&lt;</span><span class='ident'>F</span>, <span class='ident'>G</span>, <span class='ident'>R</span><span class='op'>&gt;</span>(
-    <span class='ident'>tries</span>: <span class='ident'>usize</span>,
+    <span class='ident'>tries</span>: <span class='ident'>u32</span>,
     <span class='ident'>wait</span>: <span class='ident'>u32</span>,
     <span class='kw-2'>mut</span> <span class='ident'>value_fn</span>: <span class='ident'>F</span>,
     <span class='kw-2'>mut</span> <span class='ident'>condition_fn</span>: <span class='ident'>G</span>

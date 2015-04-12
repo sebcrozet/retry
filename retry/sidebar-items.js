@@ -1,1 +1,1 @@
-initSidebarItems({"struct":[["RetryError","An error indicating that a retry call failed."]],"fn":[["retry","Invokes a function until a condition is satisfied."]]});
+initSidebarItems({"fn":[["retry","Invokes a function until a condition is satisfied."]],"struct":[["RetryError","An error indicating that a retry call failed."]]});
