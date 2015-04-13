@@ -43,38 +43,9 @@
     <section id='main' class="content fn">
 <h1 class='fqn'><span class='in-band'>Function <a href='index.html'>retry</a>::<wbr><a class='fn' href=''>retry</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-111' href='../src/retry/lib.rs.html#73-94'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn retry&lt;F, G, R&gt;(tries: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, wait: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, value_fn: F, condition_fn: G) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;R, <a class='struct' href='../retry/struct.RetryError.html' title='retry::RetryError'>RetryError</a>&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>() -&gt; R, G: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;R) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></span></pre><div class='docblock'><p>Invokes a function until a condition is satisfied.</p>
-
-<p><code>value_fn</code> is a closure that will be executed to produce a value. <code>condition_fn</code> is a closure
-that takes the value produced by <code>value_fn</code> and returns a boolean indicating whether or not
-some desired condition is true. <code>retry</code> will invoke <code>value_fn</code> up to <code>tries</code> times, returning
-the value as soon as <code>condition_fn</code> is satisfied, or returning an error when the last try was
-unsuccessful. It will wait <code>wait</code> milliseconds after each unsuccessful try.</p>
-
-<h1 id="failures" class='section-header'><a
-                           href="#failures">Failures</a></h1>
-<p>Will fail when:</p>
-
-<ol>
-<li><code>value_fn</code> has been been invoked <code>tries</code> times and has still not satisfied <code>condition_fn</code>.</li>
-<li><code>tries</code> is zero. It must be at least 1.</li>
-</ol>
-
-<h1 id="examples" class='section-header'><a
-                           href="#examples">Examples</a></h1>
-<p>Imagine an HTTP API with an endpoint that returns 204 No Content while a job is processing, and
-eventually 200 OK when the job has completed. Retrying until the job is finished would be
-written:</p>
-<pre id='rust-example-rendered' class='rust '>
-<span class='kw'>match</span> <span class='ident'>retry</span>(<span class='number'>10</span>, <span class='number'>500</span>, <span class='op'>||</span> <span class='ident'>api_client</span>.<span class='ident'>query_job_status</span>(), <span class='op'>|</span><span class='ident'>response</span><span class='op'>|</span> <span class='ident'>response</span>.<span class='ident'>code</span> <span class='op'>==</span> <span class='number'>200</span>) {
-    <span class='prelude-val'>Ok</span>(<span class='ident'>response</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Job completed with result: {}&quot;</span>, <span class='ident'>response</span>.<span class='ident'>body</span>),
-    <span class='prelude-val'>Err</span>(<span class='ident'>error</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Job completion could not be verified: {}&quot;</span>, <span class='ident'>error</span>),
-}
-</pre>
-
-<p>This retries the API call up to 10 times, waiting 500 milliseconds after each unsuccesful
-attempt.</p>
+        </span><a id='src-288' href='../src/retry/lib.rs.html#157-164'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn retry&lt;F, G, R&gt;(tries: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, wait: <a href='http://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, value_fn: F, condition_fn: G) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;R, <a class='struct' href='../retry/struct.RetryError.html' title='retry::RetryError'>RetryError</a>&gt; <span class='where'>where F: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>() -&gt; R, G: <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;R) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></span></pre><div class='docblock'><p>Invokes a function a certain number of times or until a condition is satisfied with a fixed
+wait after each unsuccessful try.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 

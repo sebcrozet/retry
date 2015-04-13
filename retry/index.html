@@ -43,12 +43,68 @@
     <section id='main' class="content mod">
 <h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>retry</a><wbr></span><span class='out-of-band'><a href='stability.html'>[stability]</a> <span id='render-detail'>
             <a id="collapse-all" href="#">[-]</a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-0' href='../src/retry/lib.rs.html#1-131'>[src]</a></span></h1>
-<div class='docblock'><p>Crate retry provides a function, <code>retry</code>, which runs an operation continuously until its
-return value satisfies a specific condition. The maximum number of times to try and the amount
-of time to wait between tries is configurable.</p>
+        </span><a id='src-0' href='../src/retry/lib.rs.html#1-258'>[src]</a></span></h1>
+<div class='docblock'><p>Crate retry provides functionality for retrying an operation until its return value satisfies a
+specific condition.</p>
+
+<h1 id="usage" class='section-header'><a
+                           href="#usage">Usage</a></h1>
+<p>Retry an operation by calling the <code>retry</code> function, supplying a maximum number of times to try,
+the number of milliseconds to wait after each unsuccessful try, a closure that produces a value,
+and a closure that takes a reference to that value and returns a boolean indicating the success
+or failure of the operation. The function will return a <code>Result</code> containing either the value
+that satisfied the condition or an error indicating that a satisfactory value could not be
+produced.</p>
+
+<p>You can also construct a retryable operation incrementally using the <code>Retry</code> type. <code>Retry::new</code>
+takes the same two closures as mutable references, and returns a <code>Retry</code> value. You can then
+call the <code>try</code> and <code>wait</code> methods on this value to add a maximum number of tries and a wait
+time, respectively. Finally, run the <code>execute</code> method to produce the <code>Result</code>.</p>
+
+<p>If a maximum number of tries is not supplied, the operation will be executed infinitely or until
+success. If a wait time is not supplied, there will be no wait between attempts.</p>
+
+<h1 id="failures" class='section-header'><a
+                           href="#failures">Failures</a></h1>
+<p>Retrying will fail when:</p>
+
+<ol>
+<li>The operation reaches the maximum number of tries without success.</li>
+<li>A value of 0 is supplied for the maximum number of tries. It must be at least 1.</li>
+</ol>
+
+<h1 id="examples" class='section-header'><a
+                           href="#examples">Examples</a></h1>
+<p>Imagine an HTTP API with an endpoint that returns 204 No Content while a job is processing, and
+eventually 200 OK when the job has completed. Retrying until the job is finished would be
+written:</p>
+<pre id='rust-example-rendered' class='rust '>
+<span class='kw'>match</span> <span class='ident'>retry</span>(<span class='number'>10</span>, <span class='number'>500</span>, <span class='op'>||</span> <span class='ident'>api_client</span>.<span class='ident'>query_job_status</span>(), <span class='op'>|</span><span class='ident'>response</span><span class='op'>|</span> <span class='ident'>response</span>.<span class='ident'>code</span> <span class='op'>==</span> <span class='number'>200</span>) {
+    <span class='prelude-val'>Ok</span>(<span class='ident'>response</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Job completed with result: {}&quot;</span>, <span class='ident'>response</span>.<span class='ident'>body</span>),
+    <span class='prelude-val'>Err</span>(<span class='ident'>error</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Job completion could not be verified: {}&quot;</span>, <span class='ident'>error</span>),
+}
+</pre>
+
+<p>This retries the API call up to 10 times, waiting 500 milliseconds after each unsuccessful
+attempt. The same result can be achieved by building a <code>Retry</code> object incrementally:</p>
+<pre id='rust-example-rendered' class='rust '>
+<span class='kw'>match</span> <span class='ident'>Retry</span>::<span class='ident'>new</span>(
+    <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>||</span> <span class='ident'>api_client</span>.<span class='ident'>query_job_status</span>(),
+    <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='op'>|</span><span class='ident'>response</span><span class='op'>|</span> <span class='ident'>response</span>.<span class='ident'>code</span> <span class='op'>==</span> <span class='number'>200</span>
+).<span class='ident'>try</span>(<span class='number'>10</span>).<span class='ident'>wait</span>(<span class='number'>500</span>).<span class='ident'>execute</span>() {
+    <span class='prelude-val'>Ok</span>(<span class='ident'>response</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Job completed with result: {}&quot;</span>, <span class='ident'>response</span>.<span class='ident'>body</span>),
+    <span class='prelude-val'>Err</span>(<span class='ident'>error</span>) <span class='op'>=&gt;</span> <span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;Job completion could not be verified: {}&quot;</span>, <span class='ident'>error</span>),
+}
+</pre>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
+                    <tr>
+                        <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.Retry.html'
+                               title='retry::Retry'>Retry</a></td>
+                        <td class='docblock short'><p>Builder object for a retryable operation.</p>
+</td>
+                    </tr>
+                
                     <tr>
                         <td><a class='stability Unmarked' title='No stability level'></a><a class='struct' href='struct.RetryError.html'
                                title='retry::RetryError'>RetryError</a></td>
@@ -60,7 +116,8 @@ of time to wait between tries is configurable.</p>
                     <tr>
                         <td><a class='stability Unmarked' title='No stability level'></a><a class='fn' href='fn.retry.html'
                                title='retry::retry'>retry</a></td>
-                        <td class='docblock short'><p>Invokes a function until a condition is satisfied.</p>
+                        <td class='docblock short'><p>Invokes a function a certain number of times or until a condition is satisfied with a fixed
+wait after each unsuccessful try.</p>
 </td>
                     </tr>
                 </table></section>
