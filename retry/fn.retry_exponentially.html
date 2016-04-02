@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="rustdoc">
-    <meta name="description" content="API documentation for the Rust `retry` fn in crate `retry`.">
-    <meta name="keywords" content="rust, rustlang, rust-lang, retry">
+    <meta name="description" content="API documentation for the Rust `retry_exponentially` fn in crate `retry`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, retry_exponentially">
 
-    <title>retry::retry - Rust</title>
+    <title>retry::retry_exponentially - Rust</title>
 
     <link rel="stylesheet" type="text/css" href="../rustdoc.css">
     <link rel="stylesheet" type="text/css" href="../main.css">
@@ -27,7 +27,7 @@
 
     <nav class="sidebar">
         
-        <p class='location'><a href='index.html'>retry</a></p><script>window.sidebarCurrent = {name: 'retry', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+        <p class='location'><a href='index.html'>retry</a></p><script>window.sidebarCurrent = {name: 'retry_exponentially', ty: 'fn', relpath: ''};</script><script defer src="sidebar-items.js"></script>
     </nav>
 
     <nav class="sub">
@@ -42,13 +42,13 @@
     </nav>
 
     <section id='main' class="content fn">
-<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>retry</a>::<wbr><a class='fn' href=''>retry</a></span><span class='out-of-band'><span id='render-detail'>
+<h1 class='fqn'><span class='in-band'>Function <a href='index.html'>retry</a>::<wbr><a class='fn' href=''>retry_exponentially</a></span><span class='out-of-band'><span id='render-detail'>
                    <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
                        [<span class='inner'>&#x2212;</span>]
                    </a>
-               </span><a id='src-92' class='srclink' href='../src/retry/src/lib.rs.html#211-218' title='goto source code'>[src]</a></span></h1>
-<pre class='rust fn'>pub fn retry&lt;F, G, R&gt;(tries: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>, wait: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>, value_fn: F, condition_fn: G) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;R, <a class='struct' href='../retry/struct.RetryError.html' title='retry::RetryError'>RetryError</a>&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>() -&gt; R, G: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;R) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></span></pre><div class='docblock'><p>Invokes a function a certain number of times or until a condition is satisfied with a fixed
-wait after each unsuccessful try.</p>
+               </span><a id='src-100' class='srclink' href='../src/retry/src/lib.rs.html#222-229' title='goto source code'>[src]</a></span></h1>
+<pre class='rust fn'>pub fn retry_exponentially&lt;F, G, R&gt;(tries: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>, wait: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a>, value_fn: F, condition_fn: G) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;R, <a class='struct' href='../retry/struct.RetryError.html' title='retry::RetryError'>RetryError</a>&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>() -&gt; R, G: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnMut.html' title='core::ops::FnMut'>FnMut</a>(&amp;R) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></span></pre><div class='docblock'><p>Invokes a function a certain number of times or until a condition is satisfied
+with an exponential backoff after each unsuccessful try.</p>
 </div></section>
     <section id='search' class="content hidden"></section>
 
