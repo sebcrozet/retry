@@ -157,7 +157,7 @@ impl<S, I, O, A> Future for RetryFuture<S, I, O, A> where S: Sleep, I: IntoItera
             },
             Either::B(poll_result) => {
                 let poll_async = poll_result
-                    .map_err(|err| Error::Internal(err.description().to_string()))?;
+                    .map_err(|err| Error::Internal(format!("{}", err)))?;
 
                 match poll_async {
                     Async::NotReady => Ok(Async::NotReady),
